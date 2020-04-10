@@ -13,14 +13,19 @@ const makerPage = (req, res) => {
   });
 };
 
+const getScoreboardPage = (req, res) => {
+  res.render('scoreboard', { csrfToken: req.csrfToken() });
+};
+
 const makeDomo = (req, res) => {
-  if (!req.body.name || !req.body.age) {
-    return res.status(400).json({ error: 'RAWR! Both name and age are required' });
+  if (!req.body.name || !req.body.age || !req.body.score) {
+    return res.status(400).json({ error: 'RAWR! All fields are required' });
   }
 
   const domoData = {
     name: req.body.name,
     age: req.body.age,
+    score: req.body.score,
     owner: req.session.account._id,
   };
 
@@ -56,6 +61,21 @@ const getDomos = (request, response) => {
   });
 };
 
+const getDomosByAge = (request, response) => {
+  const res = response;
+
+  return Domo.DomoModel.getDomosByAge((err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occurred' });
+    }
+
+    return res.json({ domos: docs });
+  });
+};
+
 module.exports.makerPage = makerPage;
 module.exports.getDomos = getDomos;
+module.exports.getDomosByAge = getDomosByAge;
 module.exports.make = makeDomo;
+module.exports.scoreboardPage = getScoreboardPage;

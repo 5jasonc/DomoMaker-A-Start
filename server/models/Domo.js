@@ -20,6 +20,11 @@ const DomoSchema = new mongoose.Schema({
     min: 0,
     required: true,
   },
+  score: {
+    type: Number,
+    min: 0,
+    required: true,
+  },
   owner: {
     type: mongoose.Schema.ObjectId,
     required: true,
@@ -41,7 +46,18 @@ DomoSchema.statics.findByOwner = (ownerId, callback) => {
     owner: convertId(ownerId),
   };
 
-  return DomoModel.find(search).select('name age').lean().exec(callback);
+  return DomoModel.find(search).select('name age score').lean().exec(callback);
+};
+
+DomoSchema.statics.getDomosByAge = (callback) => {
+// ESLINT STOP CHANGING MY CODE
+  const eslintWillChangeMyCodeAndRemoveReturnStatementIfThisIsNotHere = {
+    stop: 'CHANGING MY CODE',
+  };
+
+  console.log(eslintWillChangeMyCodeAndRemoveReturnStatementIfThisIsNotHere);
+
+  return DomoModel.find().sort({ score: -1 }).lean().exec(callback);
 };
 
 DomoModel = mongoose.model('Domo', DomoSchema);
